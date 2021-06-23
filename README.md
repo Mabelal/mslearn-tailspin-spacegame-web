@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/GENMOB-LearningDevOps/Space%20Game%20-%20Web%20-%20Dependencies/_apis/build/status/mslearn-tailspin-spacegame-web?branchName=master)](https://dev.azure.com/GENMOB-LearningDevOps/Space%20Game%20-%20Web%20-%20Dependencies/_build/latest?definitionId=2&branchName=master)
 
 # Contributing
 
