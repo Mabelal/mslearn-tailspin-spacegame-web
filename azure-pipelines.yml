@@ -1,16 +1,15 @@
-
 trigger:
 - '*'
 
 pool:
-  vmImage: 'ubuntu-20.04'
+  name: 'MyAgentPool'
   demands:
-    - npm
+  - npm
 
 variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-  dotnetSdkVersion: '5.0.203'
+  dotnetSdkVersion: '5.x'
 
 steps:
 - task: UseDotNet@2
@@ -40,15 +39,23 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
 
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Debug'
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
 
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Release'
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   condition: succeeded()
-
+  
